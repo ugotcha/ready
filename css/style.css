@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Amatic+SC|Share+Tech+Mono');
+
+@media print {
+  .info {
+    display: none !important;
+  }
+  .ui-resizable-handle {
+    display: none !important;
+  }
+}
+
+.no-transition {
+  transition: none;
+}
+
+@page { size:8.5in 11in; margin: 0.25cm }
+
+* {
+  font-family: 'Fredericka the Great', serif;
+  margin: 0;
+  padding: 0;
+  line-height: 120%;
+}
+
+body, html, #wrapper, .container {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+.container {
+  margin: auto;
+}
+
+.inner {
+  transform-origin: center;
+  height: 1000px;
+  width: 2000px;
+  position: absolute;
+}
+
+.section {
+  transform-origin: center;
+  display: block;
+  width: 400px;
+  height: 200px;
+  min-width: 200px;
+  min-height: 100px;
+  max-height: 800px;
+  position: absolute;
+  background: #FFF9ED;
+  border: 3px double rgba(0,0,0,0.25);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  border-radius: 0;
+  padding: 10px 15px;
+  margin: 10px;
+}
+
+#custom .section {
+  position: absolute;
+  margin: 10px;
+}
+
+.inner::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: beige;
+  box-shadow: inset 0 0 200px black;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='12' viewBox='0 0 20 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 12c0-.622-.095-1.221-.27-1.785A5.982 5.982 0 0 0 10 12c1.67 0 3.182-.683 4.27-1.785A5.998 5.998 0 0 0 14 12h2a4 4 0 0 1 4-4V6c-1.67 0-3.182.683-4.27 1.785C15.905 7.22 16 6.622 16 6c0-.622-.095-1.221-.27-1.785A5.982 5.982 0 0 0 20 6V4a4 4 0 0 1-4-4h-2c0 .622.095 1.221.27 1.785A5.982 5.982 0 0 0 10 0C8.33 0 6.818.683 5.73 1.785 5.905 1.22 6 .622 6 0H4a4 4 0 0 1-4 4v2c1.67 0 3.182.683 4.27 1.785A5.998 5.998 0 0 1 4 6c0-.622.095-1.221.27-1.785A5.982 5.982 0 0 1 0 6v2a4 4 0 0 1 4 4h2zm-4 0a2 2 0 0 0-2-2v2h2zm16 0a2 2 0 0 1 2-2v2h-2zM0 2a2 2 0 0 0 2-2H0v2zm20 0a2 2 0 0 1-2-2h2v2zm-10 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z' fill='%239C92AC' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.inner::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #FFFEFB;
+  background: linear-gradient(45deg, rgba(169,3,41,1) 0%,rgba(151,2,36,0.2) 20%,rgba(143,2,34,0.27) 29%,rgba(175,98,3,0.41) 47%,rgba(144,52,13,0.6) 72%,rgba(109,0,25,1) 100%);
+  box-shadow: inset 0 0 150px black, inset 0 0 50px black;
+  mix-blend-mode: overlay;
+}
+
+a {
+  color: purple;
+  text-decoration: none;
+}
+
+.section p {
+  margin: 0;
+  padding: 0;
+}
+
+h1 a, h2 a, h3 a {
+  color: #000;
+}
+
+.section:hover {
+  box-shadow: inset 0 0 30px black;
+}
+
+.section a {
+  border-radius: 5px;
+  padding: 0 6px;
+}
+
+.section a:hover {
+  background: rgba(255,255,255,0.6);
+  box-shadow: 0 0 6px rgba(255,255,255,0.45);
+}
+
+.section a.n-reference:hover {
+  filter: invert(100%);
+  color: black;
+  border: 1px solid black;
+  border-radius: 0px;
+}
+
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  font-weight: normal;
+  margin: 0.5em 0;
+}
+
+.content li::before {
+  content: "\27BA ";
+  opacity: 0.5;
+  margin-right: 6px;
+}
+
+a.n-reference {
+  padding: 6px;
+  line-height: 2em;
+  border-radius: 5px;
+  border: 1px dashed purple;
+  background: rgba(0,0,0,0.025);
+}
+
+.reference .handle-heading {
+  float: left;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.handle-heading {
+  z-index: 1;
+  cursor: move;
+}
+
+.section a.handle {
+  color: #000;
+  padding: 0 6px 0 0;
+  font-family: 'Amatic SC', cursive;
+}
+
+.section ul {
+  margin-top: 6px;
+  list-style-type: none;
+}
+
+.section.note ul:first-child {
+  font-family: serif;
+}
+
+.content a {
+  font-style: italic;
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.section .content {
+  position: unset;
+}
+
+/* Connections */
+
+connection {
+   border: 3px dashed purple;
+   opacity: 0.25;
+   z-index: 1;
+   border-radius:100%;
+   pointer-events:none;
+   mix-blend-mode: normal;
+}
+
+/* ------------------------------------------------------------------------ */
+
+/* Info panel */
+
+.info .toc a::before {
+  content: '';
+}
+
+.info .toc a.current {
+  pointer-events: none;
+  color: #FFF9ED;
+}
+
+.info .toc a.current::before {
+  content: "\27BA ";
+}
+
+.toc .hidden {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+/* Keypress styling */
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  line-height: 10px;
+  vertical-align: middle;
+  color: #000;
+  font-size: 1em;
+  font-weight: bold;
+  background: #F1F0ED;
+  border: 3px double rgba(0,0,0,0.35);
+  padding: 6px 10px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.25);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    background: rgba(255, 255, 255, 0.2);
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    /* border: solid whiteSmoke 4px; */
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
