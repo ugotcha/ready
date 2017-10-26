@@ -9,7 +9,7 @@ var $c; // will hold container where transforms are made
 jQuery(document).ready(function() {
 
     // attach the plugin to an element
-    $('#wrapper').gitdown( {    'title': 'Traversal',
+    $('#wrapper').gitdown( {    'title': 'Treverse',
                                 'file': 'README.md',
                                 'callback': main
     } );
@@ -17,22 +17,26 @@ jQuery(document).ready(function() {
 
     function main() {
         $c = $('.inner').addClass('inner');
-        $('.info .toc a.current').removeClass('current');
+        
         position_sections();
         configure_sections();
         register_events();
-        update_transform(transforms);
-    }
 
-    function update_transform(t) {
-        var str = '';
-        for ( key in t ) {
-            str += `${key}(${t[key]}) `;
-        }
-        $c.css( 'transform', str );
+        // move to current section
+        var $current = $('.info .toc a.current');
+        $current.removeClass('current');
+        $current.click();
+
     }
 
     function position_sections() {
+
+        // start by adding some padding around .inner
+        var w = $('.inner').width();
+        var h = $('.inner').height();
+        $('.inner').width( w + w/2 );
+        $('.inner').height( h + h/2 );
+
         var docwidth = $(document).width();
         var $sections = $('.section *');
         if ( $sections.length > 0 ) {
@@ -47,6 +51,11 @@ jQuery(document).ready(function() {
                     for ( var i = 0; i < pairs.length; i++ ) {
                         var key = pairs[i].split(':')[0];
                         var value = pairs[i].split(':')[1];
+                        if ( key === 'left' ) {
+                            value = parseFloat(value) + w/2;
+                        } else if ( key === 'top' ) {
+                            value = parseFloat(value) + h/2;
+                        }
                         $(this).closest('.section').css( key, value );
                     }
                 }
@@ -55,8 +64,8 @@ jQuery(document).ready(function() {
 
         // iterate over sections and position elements if they're at 0,0
         var counter = 0;
-        var left = 0;
-        var top = 0;
+        var left = w;
+        var top = h;
         $('.section').each(function() {
             var position = $(this).position();
             if ( position.top === 0 && position.left === 0 ) {
@@ -82,26 +91,29 @@ jQuery(document).ready(function() {
             
             var $s = $(this);
 
-            // quickly add a draggable class for drag method
-            $s.addClass('draggable');
-
             // set initial position values
-            var x = $s.css('left').slice( 0, -2 );
-            var y = $s.css('top').slice( 0, -2 );
+            var x = parseFloat( $s.css('left') );
+            var y = parseFloat( $s.css('top') );
             $s.attr('data-x', x);
             $s.attr('data-y', y);
         });
+    }
+
+    function update_transform(t) {
+        var str = '';
+        for ( key in t ) {
+            str += `${key}(${t[key]}) `;
+        }
+        $c.css( 'transform', str );
     }
 
     // return a transform for container based on element e
     function transform_focus(element) {
         var t = '';
 
-        var e = document.getElementById( element.substr(1) );
+        var e = document.getElementById(element);
         var x = e.offsetLeft;
-        //x -= e.parentNode.offsetLeft;
         var y = e.offsetTop;
-        //y -= e.parentNode.offsetTop;
         var w = e.offsetWidth;
         var h = e.offsetHeight;
 
@@ -109,142 +121,46 @@ jQuery(document).ready(function() {
         var maxheight = window.innerHeight;
 
         // center viewport on section
+        
+        // in first run-through, x, y, w, and h are different for some reason!?!
+        // todo
+        console.log(x,y,w,h,maxwidth,maxheight);
         var translateX = x - (maxwidth/2) + w/2;
         var translateY = y - (maxheight/2) + h/2;
 
         transforms['translateX'] = -translateX + 'px';
         transforms['translateY'] = -translateY + 'px';
 
-        // scale transform based on window dismentions
-        var translateZ = Math.min( 
-            maxwidth / w,
-            maxheight / h
-          );
-
-        //var scale = 1;
-        transforms['scaleZ'] = translateZ;// / 2;
-
         update_transform(transforms);
+
+        // scale current section to fit window
+        scale = Math.min(maxwidth/(w*1.25), maxheight/(h*1.25));
+        $('.section.zoom').removeClass('zoom');
+        $('.section.current').addClass('zoom');
+        $('.zoom').css( 'transform', `scale(${scale})`);
     }
 
     function register_events() {
 
         $('a[href^=#]').click(function(e){
+            // we unfortunately need to override default browser behavior for local links
             e.preventDefault();
             // remove .current class
-            $('.section').removeClass('current');
-            //e.classList.add('current');           
+            $('.section.current').removeClass('current');        
             var element = this.getAttribute('href');
             $(element).addClass('current');
-            transform_focus(element);
-        });
-
-        // target elements with the "draggable" class
-        interact('.draggable').allowFrom('.handle-heading')
-            .draggable({
-                // enable inertial throwing
-                inertia: false,
-                // keep the element within the area of it's parent
-                restrict: {
-                restriction: 'self',
-                endOnly: true,
-                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-            },
-            // enable autoScroll
-            autoScroll: true,
-
-            // call this function on every dragmove event
-            onmove: dragMoveListener,
-            // call this function on every dragend event
-            onend: function (event) {
-                $(event.target).removeClass('no-transition');
+            transform_focus(element.substr(1));
+            //update toc
+            $('.info .toc a.current').removeClass('current');
+            $(`.info .toc a[href="${element}"]`).addClass('current');
+            // scroll to top of current link in toc
+            var t = $(' .info .toc');
+            var c = $(' .info .toc a.current');
+            if ( c.length > 0 ) {
+                t.animate({scrollTop: t.scrollTop() + (c.offset().top - t.offset().top)});
             }
         });
 
-        // target elements with the "draggable" class
-        interact('.inner').draggable({
-            // enable inertial throwing
-            inertia: false,
-
-            // enable autoScroll
-            autoScroll: true,
-
-            // call this function on every dragmove event
-            onmove: dragMoveListener,
-            onend: function (event) {
-                $(event.target).removeClass('no-transition');
-            }
-        });
-
-        // mousewheel zoom handler
-        $('.inner').on('wheel', function(event){
-            event.preventDefault();
-            var scale = parseFloat( transforms['scale'] );
-            if( event.originalEvent.deltaY < 0 ) {
-                transforms['scale'] = scale + 0.25;// + 'px';
-            } else{
-                transforms['scale'] = scale - 0.25;// + 'px';
-            }
-            update_transform(transforms);
-        });
-
-    }
-
-    function create_section(x,y){
-        var name = 'New Section';
-        name = unique_name(name);
-        var html = default_section_html(name);
-        $('.inner').append(html);
-        $s = $( '#' + $gd.clean(name) );
-        $s.css( { "top": y + 'px', "left": x + 'px' } );
-        $s.css( { "width": '200px', "height": '100px' } );
-        $s.attr( 'data-x', x).attr( 'data-y', y );
-        $s.find('.content').click(function(){
-            var content = '';
-            var id = $(this).parent().attr('id');
-            render_editor(id);
-        });
-    }
-
-    function default_section_html(name) {
-        var id = $gd.clean(name);
-        var html = '<div class="section heading draggable" id="' + id + '">';
-        html += '<h2 class="handle-heading">';
-        html += '<a class="handle" name="' + id + '">' + name + '</a>'
-        html += '</h2>';
-        html += '<div class="content">';
-        html += '<p>New content</p>';
-        html += '</div>'; // .content
-        html += '</div>'; // .section
-        return html;
-    }
-
-    // drag handler
-    function dragMoveListener (event) {
-        event.preventDefault();
-        var target = event.target;
-        var $target = $(target);
-
-        $(target).addClass('no-transition');
-        
-        // keep the dragged position in the data-x/data-y attributes
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-        if ( $target.hasClass('inner') ) {
-            var x = parseFloat( transforms['translateX'] );
-            var y = parseFloat( transforms['translateY'] );
-            transforms['translateX'] = x - event.dx + 'px';
-            transforms['translateY'] = y - event.dy + 'px';
-            update_transform(transforms);
-        } else {
-            $target.css('top', y + 'px');
-            $target.css('left', x + 'px');
-
-            // update the position attributes
-            $target.attr('data-x', x);
-            $target.attr('data-y', y);
-        }
     }
 
 });
