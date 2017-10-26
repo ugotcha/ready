@@ -121,10 +121,6 @@ jQuery(document).ready(function() {
         var maxheight = window.innerHeight;
 
         // center viewport on section
-        
-        // in first run-through, x, y, w, and h are different for some reason!?!
-        // todo
-        console.log(x,y,w,h,maxwidth,maxheight);
         var translateX = x - (maxwidth/2) + w/2;
         var translateY = y - (maxheight/2) + h/2;
 
@@ -160,6 +156,22 @@ jQuery(document).ready(function() {
                 t.animate({scrollTop: t.scrollTop() + (c.offset().top - t.offset().top)});
             }
         });
+
+        // LEFT and RIGHT arrows
+        document.addEventListener('keyup', (event) => {
+            var key = event.key;
+            if ( key === 'ArrowLeft' ) {
+                var $prev = $('.toc a.current').prev()[0];
+                if (typeof $prev === "undefined") {
+                    $('.toc a:last-child')[0].click();
+                } else $prev.click();
+            } else if ( key === 'ArrowRight' ) {
+                var $next = $('.toc a.current').next()[0];
+                if (typeof $next === "undefined") {
+                    $('.toc a:first-child')[0].click();
+                } else $next.click();
+            }
+        }, false);
 
     }
 
