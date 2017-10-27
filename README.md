@@ -29,9 +29,25 @@ Interactive document immersion
 Example Gists <!-- {$gd_gist} -->
 - [Await](https://gist.github.com/eb48e3ccd0e0fc6a502a8ebe02a38715) - Simple example via monotony.
 
+<!-- {$gd_collapsible_appearance} -->
+
+-----
+
 Themes <!-- {$gd_css} -->
 
 <!-- {$gd_slider_fontsize="110,50,300,1,%"} -->
+
+<!-- {$gd_select_primary-color} -->
+- Default
+- Slategrey
+- Burlywood
+- Green
+- Magenta
+- Brown
+- Red
+- Dodgerblue
+
+<!-- {$gd_collapsible_end_appearance} -->
 
 <!-- {$gd_toc="Contents"} -->
 
