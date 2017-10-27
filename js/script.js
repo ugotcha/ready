@@ -14,6 +14,7 @@ jQuery(document).ready(function() {
                                 'callback': main
     } );
     var $gd = $('#wrapper').data('gitdown');
+    var eid = '#wrapper';
 
     function main() {
         $c = $('.inner').addClass('inner');
@@ -37,7 +38,7 @@ jQuery(document).ready(function() {
         $('.inner').width( w + w/2 );
         $('.inner').height( h + h/2 );
 
-        var docwidth = $(document).width();
+        var docwidth = window.innerWidth;
         var $sections = $('.section *');
         if ( $sections.length > 0 ) {
             // find attributes and position section
@@ -127,13 +128,12 @@ jQuery(document).ready(function() {
         transforms['translateX'] = -translateX + 'px';
         transforms['translateY'] = -translateY + 'px';
 
-        update_transform(transforms);
+        $('.inner').css( 'transform-origin', `${x+w/2}px ${y+h/2}px` );
 
         // scale current section to fit window
-        scale = Math.min(maxwidth/(w*1.25), maxheight/(h*1.25));
-        $('.section.zoom').removeClass('zoom');
-        $('.section.current').addClass('zoom');
-        $('.zoom').css( 'transform', `scale(${scale})`);
+        scale = Math.min(maxwidth/(w*1.5), maxheight/(h*1.5));
+        transforms['translateZ'] = scale * 100 + 'px';
+        update_transform(transforms);
     }
 
     function register_events() {
