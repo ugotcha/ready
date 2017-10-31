@@ -167,11 +167,6 @@ a.n-reference {
   padding: 0;
 }
 
-.handle-heading {
-  z-index: 1;
-  cursor: move;
-}
-
 .section a.handle {
   font-weight: 100;
   text-transform: uppercase;

@@ -36,7 +36,7 @@ Example Gists <!-- {$gd_gist} -->
 
 Themes <!-- {$gd_css} -->
 
-<!-- {$gd_slider_fontsize="110,50,300,1,%"} -->
+<!-- {$gd_slider_fontsize="130,50,300,1,%"} -->
 
 <!-- {$gd_select_primary-color} -->
 - Default
