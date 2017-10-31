@@ -107,13 +107,17 @@ jQuery(document).ready(function() {
         }
 
         // now position elements that don't have position comments
-        var counter = 0;
-        var left = w / 8;
-        var top = h / 8;
         var padding = 20;
-        if ( $gd.settings.heading === 'p' ) padding = 10;
+        var divisor = 8;
+        if ( $gd.settings.heading === 'p' ) {
+            padding = 10;
+            divisor = 2;
+        }
+        var counter = 0;
+        var left = w / divisor;
+        var top = h / divisor;
         var row_height = 0;
-        $('.section').each(function () {
+        $(eid + ' .section').each(function () {
 
             // calculate and update section height
             var height = $(this).find('.content').height();
@@ -139,7 +143,7 @@ jQuery(document).ready(function() {
                     if ( $gd.settings.heading === 'p' ) allowed_width = prev_width;
                     // increment height if width of document is surpassed
                     if (left > allowed_width - (prev_width * 2)) {
-                        left = w / 8;
+                        left = w / divisor;
                         top += row_height + padding;
                         row_height = 0;
                     } else {
