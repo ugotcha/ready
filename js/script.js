@@ -15,43 +15,54 @@ jQuery(document).ready(function() {
     } );
     var $gd = $('#wrapper').data('gitdown');
     var eid = '#wrapper';
+    var eid_inner = eid + ' .inner';
+    var inner_width = $(eid_inner).width();
+    var inner_height = $(eid_inner).height();
 
     function main() {
-        if ( $gd.settings.loaded ){
-            $c = $('.inner').addClass('inner');
-            
-            position_sections();
-            configure_sections();
-            register_events();
+        $c = $('.inner').addClass('inner');
 
-            // move to current section
-            var $current = $('.info .toc a.current');
-            $current.removeClass('current');
-            $current.click();
-        }
+        configure_mode();
+        
+        position_sections();
+        configure_sections();
+        register_events();
 
+        // move to current section
+        var $current = $('.info .toc a.current');
+        $current.removeClass('current');
+        $current.click();
     }
 
-    function configure_mode(mode) {
+    function configure_mode() {
+        var mode = $gd.settings.mode;
         if ( mode === 'lyrics' ) {
             var $sections = $(eid + ' .inner .section');
             $sections.each(function(){
-                //
                 var id = $(this).attr('id');
-            })//
+                // create sub-section at each br
+                $br = $(this).find('br');
+                $br.each(function(){
+                    // create new sub-section
+                });
+            });
+            
+            $(eid + ' .section .handle-heading').hide();
+        } else if ( mode === 'scripture' ) {
+            $(eid + ' .section .handle-heading').hide();
+        } else {
+            $(eid + ' .section .handle-heading').show();
         }
     }
 
     function position_sections() {
 
         // start by adding some padding around .inner
-        var w = $('.inner').width();
-        var h = $('.inner').height();
+        var w = inner_width;
+        var h = inner_height;
 
-        if ( $gd.settings.loaded ) {
-            $('.inner').width( w + w/2 );
-            $('.inner').height( h + h/2 );
-        }
+        $('.inner').width( w + w/2 );
+        $('.inner').height( h + h/2 );
 
         var docwidth = $('.inner').width();
         var $sections = $('.section *');
@@ -171,6 +182,10 @@ jQuery(document).ready(function() {
     }
 
     function register_events() {
+
+        $(eid + ' .info .field.select.mode').click(function() {
+            configure_mode();
+        });
 
         $('a[href^=#]').click(function(e){
             // we unfortunately need to override default browser behavior for local links
