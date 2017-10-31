@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
     function main() {
         $c = $('.inner').addClass('inner');
 
-        configure_mode();
+        //configure_mode();
         
         position_sections();
         configure_sections();
@@ -109,7 +109,7 @@ jQuery(document).ready(function() {
         // now position elements that don't have position comments
         var padding = 20;
         var divisor = 8;
-        if ( $gd.settings.heading === 'p' ) {
+        if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) {
             padding = 10;
             divisor = 2;
         }
@@ -140,7 +140,7 @@ jQuery(document).ready(function() {
                     var prev_width = $(this).prev('.section').width() + padding;
                     // setup allowed_width to enforce single column when p tag used for heading
                     var allowed_width = w;
-                    if ( $gd.settings.heading === 'p' ) allowed_width = prev_width;
+                    if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) allowed_width = prev_width;
                     // increment height if width of document is surpassed
                     if (left > allowed_width - (prev_width * 2)) {
                         left = w / divisor;
