@@ -41,25 +41,33 @@ jQuery(document).ready(function() {
     }
 
     function configure_mode() {
-        var mode = $gd.settings.mode;
-        if ( mode === 'lyrics' ) {
-            var $sections = $(eid + ' .inner .section');
-            $sections.each(function(){
-                var id = $(this).attr('id');
-                // create sub-section at each br
-                $br = $(this).find('br');
-                $br.each(function(){
-                    // create new sub-section
-                });
+        var mode = $gd.settings.heading;
+        if ( mode === 'p' ) {
+            $(eid).addClass('gd-lyrics');
+            $(eid + ' .section.heading').each(function(){
+                var heading = $(this).find('a.handle').html();
+                var $c = $(this).find('.handle-heading');
+                heading = `<div class="content">${heading}</div>`;
+                $c.after(heading);
             });
-            
-            $(eid + ' .section .handle-heading').hide();
-        } else if ( mode === 'scripture' ) {
-            $(eid + ' .section .handle-heading').hide();
-        } else {
-            $(eid + ' .section .handle-heading').show();
+            // hide headings
+            $(eid + ' .section.heading .handle-heading').hide();
         }
     }
+
+    function default_section_html(name, content) {
+        var id = $gd.clean(name);
+        var html = '<div class="section heading" id="' + id + '">';
+        html += '<h2 class="handle-heading">';
+        html += '<a class="handle" name="' + id + '">' + name + '</a>'
+        html += '</h2>';
+        html += '<div class="content">';
+        html += content;
+        html += '</div>'; // .content
+        html += '</div>'; // .section
+        return html;
+    }
+
 
     function position_sections() {
 
@@ -70,7 +78,6 @@ jQuery(document).ready(function() {
         $('.inner').width( w + w/2 );
         $('.inner').height( h + h/2 );
 
-        var docwidth = $('.inner').width();
         var $sections = $('.section *');
         if ($sections.length > 0) {
             // find attributes and position section
@@ -104,12 +111,16 @@ jQuery(document).ready(function() {
         var left = w / 8;
         var top = h / 8;
         var padding = 20;
+        if ( $gd.settings.heading === 'p' ) padding = 10;
         var row_height = 0;
         $('.section').each(function () {
 
             // calculate and update section height
-            var height = $(this).find('.handle-heading').height();
-            height += $(this).find('.content').height();
+            var height = $(this).find('.content').height();
+            var $heading = $(this).find('.handle-heading');
+            if ( $heading.is(":visible") ) {
+                height += $(this).find('.handle-heading').height();
+            }
 
             // row_height will be the height of the tallest section in the current row
             if (height > row_height) {
@@ -119,13 +130,15 @@ jQuery(document).ready(function() {
             var x = parseFloat( $(this).css('left') );
             var y = parseFloat( $(this).css('top') );
             if ( x === 0 && y === 0 ) {
-                console.log( $(this).attr('id') );
                 $(this).height(height + padding);
                 // set default values for section positions
                 if (counter > 0) {
                     var prev_width = $(this).prev('.section').width() + padding;
+                    // setup allowed_width to enforce single column when p tag used for heading
+                    var allowed_width = w;
+                    if ( $gd.settings.heading === 'p' ) allowed_width = prev_width;
                     // increment height if width of document is surpassed
-                    if (left > docwidth - (prev_width * 2)) {
+                    if (left > allowed_width - (prev_width * 2)) {
                         left = w / 8;
                         top += row_height + padding;
                         row_height = 0;
@@ -183,7 +196,7 @@ jQuery(document).ready(function() {
         $('.inner').css( 'transform-origin', `${x+w/2}px ${y+h/2}px` );
 
         // scale current section to fit window
-        scale = Math.min(maxwidth/(w*1.5), maxheight/(h*1.5));
+        scale = Math.min( maxwidth/(w*1.5), maxheight/(h*1.5) );
         transforms['translateZ'] = scale * 100 + 'px';
         update_transform(transforms);
     }

@@ -28,6 +28,7 @@ Interactive document immersion
 
 Example Gists <!-- {$gd_gist} -->
 - [Await](https://gist.github.com/eb48e3ccd0e0fc6a502a8ebe02a38715) - Simple example via monotony.
+- [Psalm 13](https://gist.github.com/Ugotsta/5465780977626af6357811344774f003) - For lyrics mode (heading=p).
 
 <!-- {$gd_collapsible_appearance} -->
 
