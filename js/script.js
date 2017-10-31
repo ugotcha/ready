@@ -32,6 +32,12 @@ jQuery(document).ready(function() {
         var $current = $('.info .toc a.current');
         $current.removeClass('current');
         $current.click();
+
+        // for cases where only one section exists
+        var id = $(eid + ' .section.current').attr('id');
+        if ( $gd.settings.loaded ) {
+            transform_focus(id);
+        }
     }
 
     function configure_mode() {
@@ -113,6 +119,7 @@ jQuery(document).ready(function() {
             var x = parseFloat( $(this).css('left') );
             var y = parseFloat( $(this).css('top') );
             if ( x === 0 && y === 0 ) {
+                console.log( $(this).attr('id') );
                 $(this).height(height + padding);
                 // set default values for section positions
                 if (counter > 0) {
