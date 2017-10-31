@@ -17,17 +17,29 @@ jQuery(document).ready(function() {
     var eid = '#wrapper';
 
     function main() {
-        $c = $('.inner').addClass('inner');
-        
-        position_sections();
-        configure_sections();
-        register_events();
+        if ( $gd.settings.loaded ){
+            $c = $('.inner').addClass('inner');
+            
+            position_sections();
+            configure_sections();
+            register_events();
 
-        // move to current section
-        var $current = $('.info .toc a.current');
-        $current.removeClass('current');
-        $current.click();
+            // move to current section
+            var $current = $('.info .toc a.current');
+            $current.removeClass('current');
+            $current.click();
+        }
 
+    }
+
+    function configure_mode(mode) {
+        if ( mode === 'lyrics' ) {
+            var $sections = $(eid + ' .inner .section');
+            $sections.each(function(){
+                //
+                var id = $(this).attr('id');
+            })//
+        }
     }
 
     function position_sections() {
@@ -35,53 +47,75 @@ jQuery(document).ready(function() {
         // start by adding some padding around .inner
         var w = $('.inner').width();
         var h = $('.inner').height();
-        $('.inner').width( w + w/2 );
-        $('.inner').height( h + h/2 );
 
-        var docwidth = window.innerWidth;
+        if ( $gd.settings.loaded ) {
+            $('.inner').width( w + w/2 );
+            $('.inner').height( h + h/2 );
+        }
+
+        var docwidth = $('.inner').width();
         var $sections = $('.section *');
-        if ( $sections.length > 0 ) {
+        if ($sections.length > 0) {
             // find attributes and position section
-            $sections.children().each(function() {
+            $sections.children().each(function () {
                 var comments = $(this).getComments();
-                if ( comments.length > 0 ) {
+                if (comments.length > 0) {
                     // comment found, extract attributes
                     var text = comments[0];
                     var s = text.substr(text.indexOf("{") + 1).split('}')[0];
                     var pairs = s.split(',');
-                    for ( var i = 0; i < pairs.length; i++ ) {
+                    for (var i = 0; i < pairs.length; i++) {
                         var key = pairs[i].split(':')[0];
                         var value = pairs[i].split(':')[1];
-                        if ( key === 'left' ) {
-                            value = parseFloat(value) + w/2;
-                        } else if ( key === 'top' ) {
-                            value = parseFloat(value) + h/2;
+                        if (key === 'left') {
+                            value = parseFloat(value) + w / 2;
+                        } else if (key === 'top') {
+                            value = parseFloat(value) + h / 2;
+                        } else if (key === 'transform') {
+                            // special case, we'll add a data-transform attr
+                            $(this).closest('.section').css('transform', value);
+                            $(this).closest('.section').attr('data-transform', value);
                         }
-                        $(this).closest('.section').css( key, value );
+                        $(this).closest('.section').css(key, value);
                     }
                 }
             });
         }
 
-        // iterate over sections and position elements if they're at 0,0
+        // now position elements that don't have position comments
         var counter = 0;
-        var left = w;
-        var top = h;
-        $('.section').each(function() {
-            var position = $(this).position();
-            if ( position.top === 0 && position.left === 0 ) {
+        var left = w / 8;
+        var top = h / 8;
+        var padding = 20;
+        var row_height = 0;
+        $('.section').each(function () {
+
+            // calculate and update section height
+            var height = $(this).find('.handle-heading').height();
+            height += $(this).find('.content').height();
+
+            // row_height will be the height of the tallest section in the current row
+            if (height > row_height) {
+                row_height = height;
+            }
+
+            var x = parseFloat( $(this).css('left') );
+            var y = parseFloat( $(this).css('top') );
+            if ( x === 0 && y === 0 ) {
+                $(this).height(height + padding);
                 // set default values for section positions
-                if ( counter > 0 ) {
-                    var prev_width = $(this).prev('.section').width();
+                if (counter > 0) {
+                    var prev_width = $(this).prev('.section').width() + padding;
                     // increment height if width of document is surpassed
-                    if ( left > docwidth - prev_width * 2 ) {
-                        left = 0;
-                        top += $(this).prev('.section').height();
+                    if (left > docwidth - (prev_width * 2)) {
+                        left = w / 8;
+                        top += row_height + padding;
+                        row_height = 0;
                     } else {
                         left += prev_width;
                     }
-                    $(this).css( {top: top, left: left} );
                 }
+                $(this).css({ top: top, left: left });
                 counter += 1;
             }
         });

@@ -47,6 +47,11 @@ Themes <!-- {$gd_css} -->
 - Red
 - Dodgerblue
 
+<!-- {$gd_select_mode} -->
+- Normal
+- Lyrics
+- Scripture
+
 <!-- {$gd_collapsible_end_appearance} -->
 
 <!-- {$gd_toc="Contents"} -->
