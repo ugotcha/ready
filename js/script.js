@@ -1,7 +1,7 @@
 var transforms = {
     'scale': 1, 'translateX': '0px', 'translateY': '0px',
-    'perspective': '400px', 'rotateX': '0deg', 'rotateY': '0deg', 'scaleZ': '1',
-    'rotateZ': '0deg', 'translateZ': '0px'
+    'perspective': '400px', 'rotateX': '5deg', 'rotateY': '0deg', 'scaleZ': '1',
+    'rotateZ': '5deg', 'translateZ': '0px'
 };
 
 var $c; // will hold container where transforms are made

@@ -63,6 +63,14 @@ body, html, #wrapper, .container {
   z-index: 0;
 }
 
+.gd-lyrics .section {
+  filter: blur(2px);
+}
+
+.gd-lyrics .section.current {
+  filter: none;
+}
+
 .section {
   transition-duration: 1s;
   transition-timing-function: ease;
