@@ -21,8 +21,6 @@ jQuery(document).ready(function() {
 
     function main() {
         $c = $('.inner').addClass('inner');
-
-        //configure_mode();
         
         position_sections();
         configure_sections();
@@ -37,21 +35,6 @@ jQuery(document).ready(function() {
         var id = $(eid + ' .section.current').attr('id');
         if ( $gd.settings.loaded ) {
             transform_focus(id);
-        }
-    }
-
-    function configure_mode() {
-        var mode = $gd.settings.heading;
-        if ( mode === 'p' ) {
-            $(eid).addClass('gd-lyrics');
-            $(eid + ' .section.heading').each(function(){
-                var heading = $(this).find('a.handle').html();
-                var $c = $(this).find('.handle-heading');
-                heading = `<div class="content">${heading}</div>`;
-                $c.after(heading);
-            });
-            // hide headings
-            $(eid + ' .section.heading .handle-heading').hide();
         }
     }
 
