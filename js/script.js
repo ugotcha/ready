@@ -6,13 +6,14 @@ var transforms = {
 
 var $c; // will hold container where transforms are made
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
     // attach the plugin to an element
-    $('#wrapper').gitdown( {    'title': 'Treverse',
-                                'file': 'README.md',
-                                'callback': main
-    } );
+    $('#wrapper').gitdown({
+        'title': 'Treverse',
+        'file': 'README.md',
+        'callback': main
+    });
     var $gd = $('#wrapper').data('gitdown');
     var eid = '#wrapper';
     var eid_inner = eid + ' .inner';
@@ -21,7 +22,7 @@ jQuery(document).ready(function() {
 
     function main() {
         $c = $('.inner').addClass('inner');
-        
+
         position_sections();
         configure_sections();
         register_events();
@@ -33,7 +34,7 @@ jQuery(document).ready(function() {
 
         // for cases where only one section exists
         var id = $(eid + ' .section.current').attr('id');
-        if ( $gd.settings.loaded ) {
+        if ($gd.settings.loaded) {
             transform_focus(id);
         }
     }
@@ -58,8 +59,8 @@ jQuery(document).ready(function() {
         var w = inner_width;
         var h = inner_height;
 
-        $('.inner').width( w + w/2 );
-        $('.inner').height( h + h/2 );
+        $('.inner').width(w + w / 2);
+        $('.inner').height(h + h / 2);
 
         var $sections = $('.section *');
         if ($sections.length > 0) {
@@ -92,7 +93,7 @@ jQuery(document).ready(function() {
         // now position elements that don't have position comments
         var padding = 20;
         var divisor = 8;
-        if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) {
+        if ($gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics') {
             padding = 10;
             divisor = 2;
         }
@@ -100,12 +101,12 @@ jQuery(document).ready(function() {
         var left = w / divisor;
         var top = h / divisor;
         var row_height = 0;
-        $(eid + ' .section').each(function () {
 
+        $(eid + ' .section').each(function () {
             // calculate and update section height
             var height = $(this).find('.content').height();
             var $heading = $(this).find('.handle-heading');
-            if ( $heading.is(":visible") ) {
+            if ($heading.is(":visible")) {
                 height += $(this).find('.handle-heading').height();
             }
 
@@ -114,16 +115,16 @@ jQuery(document).ready(function() {
                 row_height = height;
             }
 
-            var x = parseFloat( $(this).css('left') );
-            var y = parseFloat( $(this).css('top') );
-            if ( x === 0 && y === 0 ) {
+            var x = parseFloat($(this).css('left'));
+            var y = parseFloat($(this).css('top'));
+            if (x === 0 && y === 0) {
                 $(this).height(height + padding);
                 // set default values for section positions
                 if (counter > 0) {
                     var prev_width = $(this).prev('.section').width() + padding;
                     // setup allowed_width to enforce single column when p tag used for heading
                     var allowed_width = w;
-                    if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) allowed_width = prev_width;
+                    if ($gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics') allowed_width = prev_width;
                     // increment height if width of document is surpassed
                     if (left > allowed_width - (prev_width * 2)) {
                         left = w / divisor;
@@ -140,13 +141,13 @@ jQuery(document).ready(function() {
     }
 
     function configure_sections() {
-        $('.section').each(function() {
-            
+        $('.section').each(function () {
+
             var $s = $(this);
 
             // set initial position values
-            var x = parseFloat( $s.css('left') );
-            var y = parseFloat( $s.css('top') );
+            var x = parseFloat($s.css('left'));
+            var y = parseFloat($s.css('top'));
             $s.attr('data-x', x);
             $s.attr('data-y', y);
         });
@@ -154,14 +155,28 @@ jQuery(document).ready(function() {
 
     function update_transform(t) {
         var str = '';
-        for ( key in t ) {
+        for (key in t) {
             str += `${key}(${t[key]}) `;
         }
-        $c.css( 'transform', str );
+        $c.css('transform', str);
     }
+
+
+    // helper method to revert transform for easy calculation of next transform
+    function default_transform() {
+        var t = {
+            'scale': 1, 'translateX': '0px', 'translateY': '0px',
+            'perspective': '400px', 'rotateX': '0deg', 'rotateY': '0deg', 'scaleZ': '1',
+            'rotateZ': '0deg', 'translateZ': '0px'
+        };
+        update_transform(t);
+    }
+
 
     // return a transform for container based on element e
     function transform_focus(element) {
+        // reset transform prior to calculation
+        default_transform();
         var t = '';
 
         var e = document.getElementById(element);
@@ -170,35 +185,45 @@ jQuery(document).ready(function() {
         var w = e.offsetWidth;
         var h = e.offsetHeight;
 
+        // we'll add some padding til we find a more optimal way to center element
+        var padding = 50;
+        h += padding;
+
         var maxwidth = window.innerWidth;
         var maxheight = window.innerHeight;
 
         // center viewport on section
-        var translateX = x - (maxwidth/2) + w/2;
-        var translateY = y - (maxheight/2) + h/2;
+        var translateX = x - (maxwidth / 2) + w / 2;
+        var translateY = y - (maxheight / 2) + h / 2;
 
         transforms['translateX'] = -translateX + 'px';
         transforms['translateY'] = -translateY + 'px';
 
-        $('.inner').css( 'transform-origin', `${x+w/2}px ${y+h/2}px` );
+        $('.inner').css('transform-origin', `${x + w / 2}px ${y + h / 2}px`);
 
         // scale current section to fit window
-        scale = Math.min( maxwidth/(w*1.5), maxheight/(h*1.5) );
+        scale = Math.min(maxwidth / (w * 1.5), maxheight / (h * 1.5));
         transforms['translateZ'] = scale * 100 + 'px';
         update_transform(transforms);
     }
 
     function register_events() {
 
-        $(eid + ' .info .field.select.mode').click(function() {
+        // update transform on window resize
+        window.addEventListener('resize', function (e) {
+            var id = $(eid + ' .section.current').attr('id');
+            transform_focus(id);
+        });
+
+        $(eid + ' .info .field.select.mode').click(function () {
             configure_mode();
         });
 
-        $('a[href^=#]').click(function(e){
+        $('a[href^=#]').click(function (e) {
             // we unfortunately need to override default browser behavior for local links
             e.preventDefault();
             // remove .current class
-            $('.section.current').removeClass('current');        
+            $('.section.current').removeClass('current');
             var element = this.getAttribute('href');
             $(element).addClass('current');
             transform_focus(element.substr(1));
@@ -208,27 +233,27 @@ jQuery(document).ready(function() {
             // scroll to top of current link in toc
             var t = $(' .info .toc');
             var c = $(' .info .toc a.current');
-            if ( c.length > 0 ) {
-                t.animate({scrollTop: t.scrollTop() + (c.offset().top - t.offset().top)});
+            if (c.length > 0) {
+                t.animate({ scrollTop: t.scrollTop() + (c.offset().top - t.offset().top) });
             }
         });
 
-        if ( $gd.settings.loaded ) {
+        if ($gd.settings.loaded) {
             // LEFT and RIGHT arrows
             document.addEventListener('keyup', (event) => {
                 var key = event.key;
-                if ( key === 'ArrowLeft' ) {
+                if (key === 'ArrowLeft') {
                     var $prev = $('.toc a.current').prev()[0];
                     if (typeof $prev === "undefined") {
                         $('.toc a:last-child')[0].click();
                     } else $prev.click();
-                } else if ( key === 'ArrowRight' ) {
+                } else if (key === 'ArrowRight') {
                     var $next = $('.toc a.current').next()[0];
                     if (typeof $next === "undefined") {
                         $('.toc a:first-child')[0].click();
                     } else $next.click();
                 }
-                }, false);
+            }, false);
         }
 
     }
