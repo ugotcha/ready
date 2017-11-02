@@ -54,13 +54,13 @@ jQuery(document).ready(function () {
 
 
     function position_sections() {
-
+        
         // start by adding some padding around .inner
         var w = inner_width;
         var h = inner_height;
 
-        $('.inner').width(w + w / 2);
-        $('.inner').height(h + h / 2);
+        $(eid_inner).width( w + w/2 );
+        $(eid_inner).height( h + h/2 );
 
         var $sections = $('.section *');
         if ($sections.length > 0) {
@@ -93,7 +93,7 @@ jQuery(document).ready(function () {
         // now position elements that don't have position comments
         var padding = 20;
         var divisor = 8;
-        if ($gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics') {
+        if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) {
             padding = 10;
             divisor = 2;
         }
@@ -101,34 +101,40 @@ jQuery(document).ready(function () {
         var left = w / divisor;
         var top = h / divisor;
         var row_height = 0;
-
         $(eid + ' .section').each(function () {
+
             // calculate and update section height
             var height = $(this).find('.content').height();
             var $heading = $(this).find('.handle-heading');
-            if ($heading.is(":visible")) {
+            if ( $heading.is(":visible") ) {
                 height += $(this).find('.handle-heading').height();
             }
 
             // row_height will be the height of the tallest section in the current row
-            if (height > row_height) {
-                row_height = height;
-            }
+            if ( height > row_height ) row_height = height;
 
-            var x = parseFloat($(this).css('left'));
-            var y = parseFloat($(this).css('top'));
-            if (x === 0 && y === 0) {
+            var x = parseFloat( $(this).css('left') );
+            var y = parseFloat( $(this).css('top') );
+            if ( x === 0 && y === 0 ) {
                 $(this).height(height + padding);
                 // set default values for section positions
                 if (counter > 0) {
                     var prev_width = $(this).prev('.section').width() + padding;
                     // setup allowed_width to enforce single column when p tag used for heading
                     var allowed_width = w;
-                    if ($gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics') allowed_width = prev_width;
+                    if ( $gd.settings.heading === 'p' || $gd.settings.heading === 'lyrics' ) {
+                        allowed_width = prev_width;
+                    }
                     // increment height if width of document is surpassed
-                    if (left > allowed_width - (prev_width * 2)) {
+                    if ( left > allowed_width - (prev_width * 1) ) {
                         left = w / divisor;
                         top += row_height + padding;
+                        var compare = top + (( row_height + padding ) * 2);
+                        var h2 = parseFloat( $(eid_inner).height() );
+                        if ( compare > h2 ) {
+                            $(eid_inner).height(h2 * 3);
+                            console.log ( h2, $(eid_inner).height() );
+                        }
                         row_height = 0;
                     } else {
                         left += prev_width;
