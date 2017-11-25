@@ -38,10 +38,11 @@ Themes <!-- {$gd_css} -->
 
 <!-- {$gd_slider_fontsize="130,50,300,1,%"} -->
 
-<!-- {$gd_select_mode} -->
-- Normal
+<!-- {$gd_select_heading} -->
+- *H2
 - Lyrics
-- Scripture
+
+<!-- {$gd_theme_variables} -->
 
 <!-- {$gd_collapsible_end_appearance} -->
 

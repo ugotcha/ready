@@ -20,6 +20,9 @@
   margin: 0;
   padding: 0;
   line-height: 120%;
+}
+
+.inner {
   transition: all 1s ease;
 }
 
