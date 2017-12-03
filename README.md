@@ -1,4 +1,4 @@
-## Treverse
+# Treverse
 The open canvas for immersive interaction with Markdwn documents and interactive stories.
 - [What's it do?](#about-treverse)
 - [What's Markdown?](#what-is-markdown)
@@ -32,9 +32,7 @@ Example Gists <!-- {$gd_gist} -->
 
 <!-- {$gd_collapsible_appearance} -->
 
------
-
-Themes <!-- {$gd_css} -->
+Appearance <!-- {$gd_css} -->
 
 <!-- {$gd_slider_fontsize="130,50,300,1,%"} -->
 
@@ -46,6 +44,10 @@ Themes <!-- {$gd_css} -->
 
 <!-- {$gd_collapsible_end_appearance} -->
 
+<!-- {$gd_collapsible_contents} -->
+
 <!-- {$gd_toc} -->
+
+<!-- {$gd_collapsible_end_contents} -->
 
 <!-- {$gd_hide} -->

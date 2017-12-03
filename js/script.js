@@ -24,6 +24,7 @@ function main() {
     position_sections();
     add_padding();
     configure_sections();
+    $(`.info .field.collapsible.contents`).removeClass('collapsed');
     register_events();
 
     // move to current section
