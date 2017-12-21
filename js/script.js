@@ -79,40 +79,40 @@ function render_variables(container) {
 }
 
 function position_sections() {
+    
     // width and height optimizations can be done via themes
     // we'll begin by getting width and height after theme injection
     var w = inner_width;
     var h = inner_height;
-
-    // find and render gd_section_style variables
-    render_variables('.section *');
 
     // now position elements that don't have position comments
     var counter = 0;
     var left = 0;
     var top = 0;
     var row_height = 0;
-    $(eid_inner + ' .section').each(function () {
 
-        var padding_left = parseFloat( $(this).css('padding-left') );
-        var padding_top = parseFloat( $(this).css('padding-top') );
+    const sections = document.querySelectorAll( gd.eid_inner + ' .section' );
+    sections.forEach( (el) => {
+        render_section_styles(el);
+        var padding_left = parseFloat( $(el).css('padding-left') );
+        var padding_top = parseFloat( $(el).css('padding-top') );
 
         // calculate and update section height
-        var height = $(this).find('.content').height();
-        if ( $(this).find('.handle-heading').is(":visible") ) {
-            height += $(this).find('.handle-heading').height();
+        var height = $(el).find('.content').height();
+        if ( $(el).find('.handle-heading').is(":visible") ) {
+            height += $(el).find('.handle-heading').height();
         }
 
         // row_height will be the height of the tallest section in the current row
         if ( height > row_height ) row_height = height;
 
-        var x = parseFloat( $(this).css('left') );
-        var y = parseFloat( $(this).css('top') );
+        var x = parseFloat( $(el).css('left') );
+        var y = parseFloat( $(el).css('top') );
         if ( x === 0 && y === 0 ) {
-            $(this).height(height + padding_top);
+            $(el).height(height + padding_top);
             // set default values for section positions
             if (counter > 0) {
-                var prev_width = $(this).prev('.section').width() + padding_left;
+                var prev_width = $(el).prev('.section').width() + padding_left;
                 // setup allowed_width to enforce single column when p tag used for heading
                 var allowed_width = w;
                 if ( gd.settings.heading === 'p' || gd.settings.heading === 'lyrics' ) {
@@ -127,8 +127,20 @@ function position_sections() {
                     left += prev_width;
                 }
             }
-            $(this).css({ top: top, left: left });
+            $(el).css({ top: top, left: left });
             counter += 1;
+        }
+    });
+}
+
+function render_section_styles(s) {
+    const vars = s.querySelectorAll('.gd-var');
+    vars.forEach( (el) => {
+        const name = el.getAttribute('name');
+        if ( name === 'gd_section_style' ) {
+            const style = el.getAttribute('data-value');
+            const section = el.closest('.section');
+            section.setAttribute( 'style', style );
         }
     });
 }

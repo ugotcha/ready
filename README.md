@@ -3,22 +3,26 @@ The open canvas for immersive interaction with Markdwn documents and interactive
 - [What's it do?](#about-treverse)
 - [What's Markdown?](#what-is-markdown)
 - [How do I use this beast?](#how-to-use-treverse)
+
 <!-- {$gd_section_style="left:53px;top:34px;width:246px;height:171px;"} -->
 
 ## About Treverse
 Treverse parses Markdown documents into sections and renders them in a large interactive canvas. Users can navigate the documents by clicking local links or via the `Contents` section in the `Info` panel.
 - [What's this Markdown?](#what-is-markdown)
 - [How do I use Treverse?](#how-to-use-treverse)
+
 <!-- {$gd_section_style="left:196px;top:297.8000183105469px;width:326px;height:200px;"} -->
 
 ## What is Markdown
 Markdown is a simple, plain text language sort of like BBCode. It lets you create documents quickly using basic symbols.
 - [How do I use Treverse?](#how-to-use-treverse)
+
 <!-- {$gd_section_style="left:505px;top:128px;width:400px;height:200px;"} -->
 
 ## How to use Treverse
 It's easy. Create a file at GitHub Gist, get the file's ID then paste it in the Gist field in the Info panel.
 - [Cool, take me back to the start.](#treverse)
+
 <!-- {$gd_section_style="left:700px;top:300px;width:400px;height:200px;"} -->
 
 # Examples <!-- {$gd_info} -->
